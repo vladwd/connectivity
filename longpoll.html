@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+  <title>Long Polls</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Long Polls</h1>
+<ul>
+  <li><a href="/" target="_blank">Home</a></li>
+  <li><a href="/websockets" target="_blank">Websockets</a></li>
+</ul>
+
+<div id="messages"></div>
+<p><i>See Network tab for more details</i></p>
+
+<script type="text/javascript" charset="utf-8">
+  function addmsg(type, cpu){
+    document.querySelector('#messages').innerHTML = '<b>MINUTE AVERAGE LOAD:</b> ' + cpu.avg[0]
+            + ';<br /><b>TOTAL MEMORY:</b> ' + cpu.memory
+            + ';<br /><b>FREE MEMORY:</b> ' + cpu.free;
+  }
+
+  function waitForMsg(){
+    $.ajax({
+      type: "GET",
+      url: "/getmessage",
+      async: true,
+      cache: false,
+      timeout:20000,
+
+      success: function(data){
+        addmsg("new", data);
+        setTimeout(waitForMsg, 1000);
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown){
+        addmsg("error", textStatus + " (" + errorThrown + ")");
+        setTimeout(waitForMsg, 10000);
+      }
+    });
+  }
+
+  $(document).ready(function(){
+    waitForMsg();
+  });
+</script>
+</body>
+
