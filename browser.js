@@ -8,23 +8,30 @@ function PublishForm(form, url) {
         });
     }
 
-    form.onsubmit = function() {
-        let message = form.message.value;
+    const sendBtn = document.querySelector('span.addBtn');
+    sendBtn.onclick = function() {
+        newElement();
+        let message = list.innerHTML;
         if (message) {
-            form.message.value = '';
             sendMessage(message);
         }
-        return false;
-    };
+    }
+
+    list.onclick = function() {
+        toLocal();
+        let message = list.innerHTML;
+        if (message) {
+            sendMessage(message);
+        }
+    }
 }
 
 // Receiving messages with long polling
 function SubscribePane(elem, url) {
 
     function showMessage(message) {
-        let messageElem = document.createElement('div');
-        messageElem.append(message);
-        elem.append(messageElem);
+        list.innerHTML = message;
+        toLocal();
     }
 
     async function subscribe() {
@@ -50,5 +57,4 @@ function SubscribePane(elem, url) {
     }
 
     subscribe();
-
 }
