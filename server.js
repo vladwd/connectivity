@@ -1,3 +1,4 @@
+//https://javascript.info/long-polling
 let http = require('http');
 let url = require('url');
 let querystring = require('querystring');
